@@ -11,6 +11,7 @@
 
 # Main Luas
 EUI_UnitFrames_Engine.lua
+EUI_UnitFrames_FiveSecondRule.lua
 EllesmereUIUnitFrames.lua
 EllesmereUIUnitFrames_PlayerAuraBars.lua
 EUI_UnitFrames_AuraContainers.lua

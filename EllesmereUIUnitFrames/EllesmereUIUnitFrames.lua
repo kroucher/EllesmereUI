@@ -212,6 +212,10 @@ local defaults = {
             frameWidth = 181,
             healthHeight = 46,
             powerHeight = 6,
+            fiveSecondRule = "off", -- "off", "overlay", "separate"
+            fiveSecondRuleText = true,
+            fiveSecondRuleWidth = 155,
+            fiveSecondRuleHeight = 12,
             powerPosition = "below",
             powerWidth = 0,
             powerX = 0,
@@ -6312,7 +6316,10 @@ local function CreatePowerBar(frame, unit, settings)
     -- Power bar border: full when detached, divider when attached; lazy.
     ns.UpdatePowerBorder(power, settings)
 
-    if unit == "player" then ns.UF_SetupPowerCost(power, settings) end
+    if unit == "player" then
+        ns.UF_SetupPowerCost(power, settings)
+        ns.UF_SetupFiveSecondRule(power, settings)
+    end
 
     return power
 end
@@ -12890,6 +12897,8 @@ ReloadFramesBody = function()
             end
         end
     end
+
+    ns.UF_SetupFiveSecondRule(frames.player and frames.player.Power, db.profile.player)
 
     -- Player Aura Bars resolve font path and outline flag at style-build time; every
     -- settings path landing here (fonts, profiles, options) forces one explicit

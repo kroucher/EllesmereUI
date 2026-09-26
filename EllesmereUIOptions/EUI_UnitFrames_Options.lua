@@ -4602,6 +4602,10 @@ initFrame:SetScript("OnEvent", function(self)
                 end
             end
             if blizzG then pf._blizzApply(s, blizzG, blizzMirror, blizzExtras, ch, stackDrop) end
+            if unitKey == "player" and power and ns.UF_PaintFiveSecondRule then
+                ns.UF_PaintFiveSecondRule(power,
+                    s.fiveSecondRule == "overlay" and 3 or nil, s, false)
+            end
             -- Spell cost preview: a third of the fill as the stock styles left it.
             if pf._pvCostSeg and pf._pvCostSeg:IsShown() and pf._powerFill then
                 pf._pvCostSeg:SetWidth(math.floor(pf._powerFill:GetWidth() / 3 + 0.5))
@@ -8842,6 +8846,21 @@ initFrame:SetScript("OnEvent", function(self)
             pbSwatch:SetScript("OnLeave", function() EllesmereUI.HideWidgetTooltip() end)
             rightRgn._lastInline = pbSwatch
             EllesmereUI.RegisterWidgetRefresh(function() updatePBSwatch() end)
+        end
+
+        if selectedUnit == "player" and EllesmereUI.IS_FOREVER == true then
+            _, h = W:DualRow(parent, y,
+                { type="dropdown", text="Five Second Rule",
+                  values={ off="Off", overlay="Mana Bar Overlay", separate="Separate Bar" },
+                  order={ "off", "overlay", "separate" },
+                  tooltip="Shows a five-second timer after a successful mana-cost spell. Move and resize the Separate Bar in Unlock Mode. Free casts may still restart the timer on this client.",
+                  getValue=function() return SVal("fiveSecondRule", "off") end,
+                  setValue=function(v) SSet("fiveSecondRule", v); EllesmereUI:RefreshPage() end },
+                { type="toggle", text="Countdown Text",
+                  disabled=function() return SVal("fiveSecondRule", "off") == "off" end,
+                  disabledTooltip="Five Second Rule",
+                  getValue=function() return SVal("fiveSecondRuleText", true) end,
+                  setValue=function(v) SSet("fiveSecondRuleText", v) end }); y = y - h
         end
 
         -- Spell Cost Prediction (player only, WoW Forever only; the page rebuilds
